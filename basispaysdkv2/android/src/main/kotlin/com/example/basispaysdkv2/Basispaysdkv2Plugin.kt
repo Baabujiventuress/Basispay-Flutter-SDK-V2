@@ -1,0 +1,184 @@
+package com.example.basispaysdkv2
+
+import android.app.Activity
+import android.content.Intent
+import android.widget.Toast
+import androidx.annotation.NonNull
+import com.basispaypg.PGConstants
+import com.basispaypg.PaymentGatewayPaymentInitializer
+import com.basispaypg.PaymentParams
+
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.PluginRegistry
+import io.flutter.plugin.common.PluginRegistry.Registrar
+import org.json.JSONObject
+import java.lang.Error
+
+/** Basispaysdkv2Plugin */
+class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener {
+  /// The MethodChannel that will the communication between Flutter and native Android
+  ///
+  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+  /// when the Flutter Engine is detached from the Activity
+  private lateinit var channel : MethodChannel
+  private var activity: Activity? = null
+  private lateinit var result: Result
+
+  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "basispaysdkv2")
+    channel.setMethodCallHandler(this)
+  }
+
+  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    if (call.method == "getPlatformVersion") {
+      startTransaction(call)
+//      result.success("Android ${android.os.Build.VERSION.RELEASE}")
+      this.result = result
+    } else {
+      result.notImplemented()
+    }
+  }
+
+  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    channel.setMethodCallHandler(null)
+  }
+
+  private fun startTransaction(call: MethodCall){
+    val arg = call.arguments as Map<*, *>?
+    if (arg != null) {
+
+      val paymentParams = arg["PayParams"] as Map<*, *>?
+      if (paymentParams == null) return showToast("Payment params is missing")
+      val orderReference = paymentParams["orderReference"] as String?
+      val customerName = paymentParams["customerName"] as String?
+      val customerEmail = paymentParams["customerEmail"] as String?
+      val customerMobile = paymentParams["customerMobile"] as String?
+      val address = paymentParams["address"] as String?
+      val postalCode = paymentParams["postalCode"] as String?
+      val city = paymentParams["city"] as String?
+      val region = paymentParams["region"] as String?
+      val country = paymentParams["country"] as String?
+      val deliveryAddress = paymentParams["deliveryAddress"] as String?
+      val deliveryCustomerName = paymentParams["deliveryCustomerName"] as String?
+      val deliveryCustomerMobile = paymentParams["deliveryCustomerMobile"] as String?
+      val deliveryPostalCode = paymentParams["deliveryPostalCode"] as String?
+      val deliveryCity = paymentParams["deliveryCity"] as String?
+      val deliveryRegion = paymentParams["deliveryRegion"] as String?
+      val deliveryCountry = paymentParams["deliveryCountry"] as String?
+
+      if (orderReference == null) return showToast("OrderReference is missing")
+      if (customerName == null) return showToast("CustomerName is missing")
+      if (customerEmail == null) return showToast("CustomerEmail is missing")
+      if (customerMobile == null) return showToast("CustomerMobile is missing")
+      if (address == null) return showToast("Address is missing")
+      if (postalCode == null) return showToast("PostalCode is missing")
+      if (city == null) return showToast("city is missing")
+      if (region == null) return showToast("Region is missing")
+      if (country == null) return showToast("country is missing")
+      if (deliveryAddress == null) return showToast("Delivery Address is missing")
+      if (deliveryCustomerName == null) return showToast("Delivery CustomerName is missing")
+      if (deliveryCustomerMobile == null) return showToast("Delivery CustomerMobile is missing")
+      if (deliveryPostalCode == null) return showToast("Delivery PostalCode is missing")
+      if (deliveryCity == null) return showToast("Delivery City is missing")
+      if (deliveryRegion == null) return showToast("Delivery Region is missing")
+      if (deliveryCountry == null) return showToast("Delivery Country Region is missing")
+
+      val pgPaymentParams = PaymentParams()
+      pgPaymentParams.orderReference = orderReference //required field(*)
+
+      pgPaymentParams.customerName = customerName //required field(*)
+
+      pgPaymentParams.customerEmail = customerEmail //required field(*)
+
+      pgPaymentParams.customerMobile = customerMobile //required field(*)
+
+      pgPaymentParams.address = address //required field(*)
+
+      pgPaymentParams.postalCode = postalCode //required field(*)
+
+      pgPaymentParams.city = city //required field(*)
+
+      pgPaymentParams.region = region //required field(*)
+
+      pgPaymentParams.country = country //required field(*)
+
+      //// optional parameters
+      pgPaymentParams.deliveryAddress = deliveryAddress
+      pgPaymentParams.deliveryCustomerName = deliveryCustomerName
+      pgPaymentParams.deliveryCustomerMobile = deliveryCustomerMobile
+      pgPaymentParams.deliveryPostalCode = deliveryPostalCode
+      pgPaymentParams.deliveryCity = deliveryCity
+      pgPaymentParams.deliveryRegion = deliveryRegion
+      pgPaymentParams.deliveryCountry = deliveryCountry
+
+      val pgPaymentInitializer = PaymentGatewayPaymentInitializer(pgPaymentParams, activity)
+      pgPaymentInitializer.initiatePaymentProcess()
+    }
+
+  }
+
+  private fun showToast(message: String) {
+    Toast.makeText(activity!!, message, Toast.LENGTH_LONG).show()
+  }
+
+  override fun onDetachedFromActivity() {
+
+  }
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+
+  }
+
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    activity = binding.activity
+    binding.addActivityResultListener(this)
+  }
+
+  override fun onDetachedFromActivityForConfigChanges() {
+
+  }
+  private fun setResult(message: String?, value: String? = null) {
+    result.error("0", message ?: "Unknown error", value)
+  }
+
+  private fun setResult(value: String?) {
+    result.success(value)
+  }
+
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+
+    if (requestCode == PGConstants.REQUEST_CODE) {
+      if (resultCode == Activity.RESULT_OK) {
+        try {
+          val paymentResponse = data?.getStringExtra(PGConstants.PAYMENT_RESPONSE)
+          if (paymentResponse.equals("null")) {
+            println("Transaction Error!")
+          } else {
+            /*val response = JSONObject(paymentResponse)
+            val result = HashMap<String, String?>()
+            for (key: String in response.keys()) {
+              result[key] = response.getString(key)
+            }*/
+            println("Transaction Completed")
+            setResult(paymentResponse)
+          }
+
+        } catch (e: Error) {
+          setResult(e.message)
+        }
+
+      }
+      if (resultCode == Activity.RESULT_CANCELED) {
+        setResult("Payment Cancelled")
+      }
+    }
+    return true
+  }
+}
