@@ -43,7 +43,9 @@ class _MyAppState extends State<MyApp> {
 
     Map<String, dynamic> paymentRequestParams = {
       //Required Params
-      "orderReference": "Cj_JbLUuQskOor5OM1HYtQ==",
+      "apiKey": "xxxx",
+      "secureHash": "xxxx",
+      "orderReference": "xxxx",
       "customerName": "Test",
       "customerEmail": "test@gmail.com",
       "customerMobile": "9597534081",

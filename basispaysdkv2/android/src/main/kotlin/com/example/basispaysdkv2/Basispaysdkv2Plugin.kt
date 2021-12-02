@@ -55,6 +55,8 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
 
       val paymentParams = arg["PayParams"] as Map<*, *>?
       if (paymentParams == null) return showToast("Payment params is missing")
+      val apiKey = paymentParams["apiKey"] as String?
+      val secureHash = paymentParams["secureHash"] as String?
       val orderReference = paymentParams["orderReference"] as String?
       val customerName = paymentParams["customerName"] as String?
       val customerEmail = paymentParams["customerEmail"] as String?
@@ -72,6 +74,8 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
       val deliveryRegion = paymentParams["deliveryRegion"] as String?
       val deliveryCountry = paymentParams["deliveryCountry"] as String?
 
+      if (apiKey == null) return showToast("API Key is missing")
+      if (secureHash == null) return showToast("SecureHash is missing")
       if (orderReference == null) return showToast("OrderReference is missing")
       if (customerName == null) return showToast("CustomerName is missing")
       if (customerEmail == null) return showToast("CustomerEmail is missing")
@@ -90,6 +94,10 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
       if (deliveryCountry == null) return showToast("Delivery Country Region is missing")
 
       val pgPaymentParams = PaymentParams()
+      pgPaymentParams.apiKey = apiKey //required field(*)
+
+      pgPaymentParams.secureHash = secureHash //required field(*)
+
       pgPaymentParams.orderReference = orderReference //required field(*)
 
       pgPaymentParams.customerName = customerName //required field(*)

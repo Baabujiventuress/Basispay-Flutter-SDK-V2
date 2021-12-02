@@ -2,7 +2,9 @@
     package="com.example.basispaysdkv2_example">
    <application
         android:label="basispaysdkv2_example"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+       android:usesCleartextTraffic="true"
+       android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
