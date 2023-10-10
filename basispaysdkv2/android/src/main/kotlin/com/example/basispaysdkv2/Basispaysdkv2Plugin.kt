@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.NonNull
-import com.basispaypg.PGConstants
-import com.basispaypg.PaymentGatewayPaymentInitializer
-import com.basispaypg.PaymentParams
+import com.basispaypg.BasisPayPGConstants
+import com.basispaypg.BasisPayPaymentInitializer
+import com.basispaypg.BasisPayPaymentParams
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -16,7 +16,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
-import io.flutter.plugin.common.PluginRegistry.Registrar
 import org.json.JSONObject
 import java.lang.Error
 
@@ -73,6 +72,8 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
       val deliveryCity = paymentParams["deliveryCity"] as String?
       val deliveryRegion = paymentParams["deliveryRegion"] as String?
       val deliveryCountry = paymentParams["deliveryCountry"] as String?
+      val returnUrl = paymentParams["returnUrl"] as String?
+      val isPgMode = paymentParams["isPgMode"] as Boolean?
 
       if (apiKey == null) return showToast("API Key is missing")
       if (secureHash == null) return showToast("SecureHash is missing")
@@ -92,8 +93,9 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
       if (deliveryCity == null) return showToast("Delivery City is missing")
       if (deliveryRegion == null) return showToast("Delivery Region is missing")
       if (deliveryCountry == null) return showToast("Delivery Country Region is missing")
+      if (returnUrl == null) return showToast("Return url is missing")
 
-      val pgPaymentParams = PaymentParams()
+      val pgPaymentParams = BasisPayPaymentParams()
       pgPaymentParams.apiKey = apiKey //required field(*)
 
       pgPaymentParams.secureHash = secureHash //required field(*)
@@ -125,7 +127,9 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
       pgPaymentParams.deliveryRegion = deliveryRegion
       pgPaymentParams.deliveryCountry = deliveryCountry
 
-      val pgPaymentInitializer = PaymentGatewayPaymentInitializer(pgPaymentParams, activity)
+      val pgPaymentInitializer = BasisPayPaymentInitializer(pgPaymentParams, activity,
+        returnUrl, isPgMode!!
+      )
       pgPaymentInitializer.initiatePaymentProcess()
     }
 
@@ -155,27 +159,28 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
     result.error("0", message ?: "Unknown error", value)
   }
 
-  private fun setResult(value: String?) {
+  private fun setResult(value: HashMap<String, String?>) {
     result.success(value)
   }
 
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
 
-    if (requestCode == PGConstants.REQUEST_CODE) {
+    if (requestCode == BasisPayPGConstants.REQUEST_CODE) {
       if (resultCode == Activity.RESULT_OK) {
         try {
-          val paymentResponse = data?.getStringExtra(PGConstants.PAYMENT_RESPONSE)
+          val paymentResponse = data?.getStringExtra(BasisPayPGConstants.PAYMENT_RESPONSE)
           if (paymentResponse.equals("null")) {
             println("Transaction Error!")
           } else {
-            /*val response = JSONObject(paymentResponse)
+            val response = JSONObject(paymentResponse)
             val result = HashMap<String, String?>()
             for (key: String in response.keys()) {
               result[key] = response.getString(key)
-            }*/
+            }
             println("Transaction Completed")
-            setResult(paymentResponse)
+            println("Result $result")
+            setResult(result)
           }
 
         } catch (e: Error) {

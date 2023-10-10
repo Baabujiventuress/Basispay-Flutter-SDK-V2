@@ -43,35 +43,43 @@ class _MyAppState extends State<MyApp> {
 
     Map<String, dynamic> paymentRequestParams = {
       //Required Params
-      "apiKey": "xxxx",
-      "secureHash": "xxxx",
-      "orderReference": "xxxx",
-      "customerName": "Test",
-      "customerEmail": "test@gmail.com",
-      "customerMobile": "9597534081",
-      "address": "address",
-      "postalCode": "600032",
+      "apiKey": "ac2d6957-f765-4b3d-99e3-b2926b1d7b3c",
+      "secureHash": "E39758E8294FA10B133339F0B63E63155CDE152BB90BE91D68DE63BBD0AC72D57CB3AEA8445ABBEEECF9E6FE5A3B6F75CC5E446C5C3178B4552A2C7953E22DAF",
+      "orderReference": "CiU6Hw9WKqq3Z9r0KzvJMA==",
+      "customerName": "Harini",
+      "customerEmail": "hari@mailinator.com",
+      "customerMobile": "6383296536",
+      "address": "Kodambakkam",
+      "postalCode": "600003",
       "city": "Chennai",
-      "region": "IN",
-      "country": "India",
+      "region": "TamilNadu",
+      "country": "IND",
+      "returnUrl": "http://157.245.105.135:9086/merchantapp/pgmode/merchant",
+      "isPgMode": false,
       //Optional Params
-      "deliveryAddress": "xxxx",
-      "deliveryCustomerName": "xxxx",
-      "deliveryCustomerMobile": "9876543210",
-      "deliveryPostalCode": "xxxx",
-      "deliveryCity": "xxxx",
-      "deliveryRegion": "xxxx",
-      "deliveryCountry": "xxxx",
+      "deliveryAddress": "",
+      "deliveryCustomerName": "",
+      "deliveryCustomerMobile": "",
+      "deliveryPostalCode": "",
+      "deliveryCity": "",
+      "deliveryRegion": "",
+      "deliveryCountry": "IND",
     };
 
     try {
       var response = Basispaysdkv2.startTransaction(paymentRequestParams);
       response.then((value) {
         print(value);
+        // for(var key in value.keys) {
+        //   print(key);
+        // }
+        var referenceNo = value['referenceNo'];
+        var success = value['success'];
+
       }).catchError((onError) {
         if (onError is PlatformException) {
           setState(() {
-            print(onError.message + " \n  " + onError.details.toString());
+            print(onError.message!+ " \n  " + onError.details.toString());
           });
         } else {
           setState(() {

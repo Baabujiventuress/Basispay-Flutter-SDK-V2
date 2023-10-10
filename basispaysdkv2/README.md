@@ -27,15 +27,19 @@ Go to your android folder in your app and go into build.gradle file
   Future<void> initPlatformState() async {
       Map<String, dynamic> paymentRequestParams = {
       //Required Params
+      "apiKey": "YOUR_PG_API_KEY",
+      "secureHash": "xxxx",
       "orderReference": "xxxx",
       "customerName": "xxxx",
       "customerEmail": "xxxx",
       "customerMobile": "xxxxxxxxxx",
       "address": "xxxx",
-      "postalCode": "600032",
+      "postalCode": "xxxx",
       "city": "xxxx",
       "region": "xxxx",
-      "country": "xxxx",
+      "country": "xxx", //ISO 3 Code Ex. IND
+      "returnUrl": "xxxx",
+      "isPgMode": false, //If pg mode LIVE set true or mode TEST set false
       //Optional Params
       "deliveryAddress": "xxxx",
       "deliveryCustomerName": "xxxx",
@@ -43,13 +47,15 @@ Go to your android folder in your app and go into build.gradle file
       "deliveryPostalCode": "xxxx",
       "deliveryCity": "xxxx",
       "deliveryRegion": "xxxx",
-      "deliveryCountry": "xxxx",
+      "deliveryCountry": "xxx",//ISO 3 Code Ex. IND
     };
 
     try {
       var response = Basispaysdkv2.startTransaction(paymentRequestParams);
       response.then((value) {
         print(value);
+        var referenceNo = value['referenceNo'];
+        var success = value['success'];
       }).catchError((onError) {
         if (onError is PlatformException) {
           setState(() {
