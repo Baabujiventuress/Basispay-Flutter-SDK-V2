@@ -1,6 +1,6 @@
 name: basispaysdkv2
 description: A Flutter plugin to use the BasisPay Payment gateway kit for accepting online payments in Flutter app.
-version: 0.0.1
+version: 0.0.2
 author:
 homepage:
 
