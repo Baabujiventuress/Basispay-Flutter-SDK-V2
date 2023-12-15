@@ -43,19 +43,19 @@ class _MyAppState extends State<MyApp> {
 
     Map<String, dynamic> paymentRequestParams = {
       //Required Params
-      "apiKey": "ac2d6957-f765-4b3d-99e3-b2926b1d7b3c",
-      "secureHash": "E39758E8294FA10B133339F0B63E63155CDE152BB90BE91D68DE63BBD0AC72D57CB3AEA8445ABBEEECF9E6FE5A3B6F75CC5E446C5C3178B4552A2C7953E22DAF",
-      "orderReference": "CiU6Hw9WKqq3Z9r0KzvJMA==",
-      "customerName": "Harini",
-      "customerEmail": "hari@mailinator.com",
-      "customerMobile": "6383296536",
-      "address": "Kodambakkam",
-      "postalCode": "600003",
-      "city": "Chennai",
-      "region": "TamilNadu",
+      "apiKey": "Your Api Key",
+      "secureHash": "Your Secure Hash",
+      "orderReference": "Order Reference",
+      "customerName": "Customer Name",
+      "customerEmail": "Customer Mail",
+      "customerMobile": "Customer Mobile",
+      "address": "Address",
+      "postalCode": "Postal Code",
+      "city": "City",
+      "region": "Region",
       "country": "IND",
-      "returnUrl": "http://157.245.105.135:9086/merchantapp/pgmode/merchant",
-      "isPgMode": false,
+      "returnUrl": "Your Return URL",
+      "isPgMode": false, //isPgMode false=TEST or true=LIVE
       //Optional Params
       "deliveryAddress": "",
       "deliveryCustomerName": "",

@@ -2,14 +2,14 @@ group 'com.example.basispaysdkv2'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.6.0'
+    ext.kotlin_version = '1.7.0'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:8.1.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -17,7 +17,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }
@@ -33,10 +33,12 @@ android {
     }
     defaultConfig {
         minSdkVersion 21
+        targetSdk 33
     }
+    namespace 'com.example.basispaysdkv2'
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.github.Baabujiventuress:basispay_android_sdkv2:1.1.6'
+    implementation 'com.github.Baabujiventuress:basispay-pgsdkv2-ktx:1.1.1'
 }

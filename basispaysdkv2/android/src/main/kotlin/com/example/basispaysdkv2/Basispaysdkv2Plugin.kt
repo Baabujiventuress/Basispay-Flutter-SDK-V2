@@ -127,7 +127,7 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
       pgPaymentParams.deliveryRegion = deliveryRegion
       pgPaymentParams.deliveryCountry = deliveryCountry
 
-      val pgPaymentInitializer = BasisPayPaymentInitializer(pgPaymentParams, activity,
+      val pgPaymentInitializer = BasisPayPaymentInitializer(pgPaymentParams, activity!!,
         returnUrl, isPgMode!!
       )
       pgPaymentInitializer.initiatePaymentProcess()
