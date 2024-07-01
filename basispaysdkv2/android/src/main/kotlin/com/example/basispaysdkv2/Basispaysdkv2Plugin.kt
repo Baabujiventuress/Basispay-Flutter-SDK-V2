@@ -163,6 +163,10 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
     result.success(value)
   }
 
+  private fun setResult(value: JSONObject) {
+    result.success(value)
+  }
+
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
 
@@ -172,6 +176,7 @@ class Basispaysdkv2Plugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plug
           val paymentResponse = data?.getStringExtra(BasisPayPGConstants.PAYMENT_RESPONSE)
           if (paymentResponse.equals("null")) {
             println("Transaction Error!")
+            setResult("Transaction Error!")
           } else {
             val response = JSONObject(paymentResponse)
             val result = HashMap<String, String?>()

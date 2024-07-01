@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -43,18 +44,18 @@ class _MyAppState extends State<MyApp> {
 
     Map<String, dynamic> paymentRequestParams = {
       //Required Params
-      "apiKey": "Your Api Key",
-      "secureHash": "Your Secure Hash",
-      "orderReference": "Order Reference",
-      "customerName": "Customer Name",
-      "customerEmail": "Customer Mail",
-      "customerMobile": "Customer Mobile",
-      "address": "Address",
-      "postalCode": "Postal Code",
-      "city": "City",
-      "region": "Region",
+      "apiKey": "ac2d6957-f765-4b3d-99e3-b2926b1d7b3c",
+      "secureHash": "61261EB0899CEBFE71583D23A4399F1685F9CDC416A338B017C09E2D37E2113752DAFCB3334C00AD90DDE55537B837C3CB47A8DB70BDC5E23E676ABBCF95DADD",
+      "orderReference": "bpQGrKHvLyocqcGauJKdfA==",
+      "customerName": "mathan",
+      "customerEmail": "Testing223@gmail.com",
+      "customerMobile": "88543221100",
+      "address": "5/223 choolaimedu,chennai-01",
+      "postalCode": "641017",
+      "city": "chennai",
+      "region": "Tamil Nadu",
       "country": "IND",
-      "returnUrl": "Your Return URL",
+      "returnUrl": "http://157.245.105.135:9057/cinchcollect/pg/merchant",
       "isPgMode": false, //isPgMode false=TEST or true=LIVE
       //Optional Params
       "deliveryAddress": "",
@@ -70,11 +71,13 @@ class _MyAppState extends State<MyApp> {
       var response = Basispaysdkv2.startTransaction(paymentRequestParams);
       response.then((value) {
         print(value);
-        // for(var key in value.keys) {
-        //   print(key);
-        // }
+        for(var key in value.keys) {
+          print(key);
+        }
         var referenceNo = value['referenceNo'];
         var success = value['success'];
+        print("==Ref=="+ referenceNo);
+        print("==Success=="+ success);
 
       }).catchError((onError) {
         if (onError is PlatformException) {

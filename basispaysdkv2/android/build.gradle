@@ -40,5 +40,5 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.github.Baabujiventuress:basispay-pgsdkv2-ktx:1.1.1'
+    implementation 'com.github.Baabujiventuress:basispay-pgsdkv2-ktx:1.1.5'
 }
